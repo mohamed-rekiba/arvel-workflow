@@ -1,0 +1,9 @@
+[project]
+name = "wf-example"
+version = "0"
+requires-python = ">=3.14"
+dependencies = ["arvel[sqlite]", "arvel-workflow[temporal]"]
+
+[tool.uv.sources]
+arvel = { path = "../../arvel", editable = true }
+arvel-workflow = { path = "..", editable = true }
