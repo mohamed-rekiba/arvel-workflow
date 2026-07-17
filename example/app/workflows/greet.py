@@ -1,5 +1,8 @@
 from arvel_workflow import workflow, run_activity
-from app.activities.greet import greet   # plain import — the framework passthrough sandbox handles it
+from app.activities.greet import (
+    greet,
+)  # plain import — the framework passthrough sandbox handles it
+
 
 @workflow
 class Greet:

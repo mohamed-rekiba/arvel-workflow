@@ -40,7 +40,9 @@ class WorkflowWorkCommand(Command):
             from temporalio.testing import WorkflowEnvironment
 
             host, _, port = settings.target.partition(":")
-            async with await WorkflowEnvironment.start_local(
+            # start_local's own signature is partially unknown to pyright (its search_attributes
+            # default is an unparameterised key type) — the engine's types, not ours.
+            async with await WorkflowEnvironment.start_local(  # pyright: ignore[reportUnknownMemberType]
                 ip=host or "127.0.0.1", port=int(port or 7233)
             ) as env:
                 self.info(f"[workflow:work] dev server up at {settings.target}")
@@ -58,6 +60,6 @@ class WorkflowWorkCommand(Command):
         self.info("[workflow:work] worker ready — Ctrl-C to drain")
         try:
             await worker.run()
-        except (KeyboardInterrupt, asyncio.CancelledError):
+        except KeyboardInterrupt, asyncio.CancelledError:
             pass
         self.info("[workflow:work] drained.")

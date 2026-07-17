@@ -1,10 +1,13 @@
 [project]
 name = "arvel-workflow"
-version = "0.1.0"
+dynamic = [
+  "version",
+] # single-sourced from arvel_workflow.__version__ (release-please managed)
 description = "Durable execution for arvel — Temporal-native, framework-ergonomic."
 readme = "README.md"
 requires-python = ">=3.14"
 license = "MIT"
+keywords = ["arvel", "workflow", "durable-execution", "temporal", "orchestration", "saga"]
 dependencies = ["arvel", "msgspec"]
 
 [project.optional-dependencies]
@@ -17,8 +20,64 @@ workflow = "arvel_workflow.provider:WorkflowServiceProvider"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.version]
+path = "src/arvel_workflow/__init__.py" # reads __version__ — one source of truth
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/arvel_workflow"]
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff", "mypy"]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+    "mypy",
+    "pyright",
+    "import-linter",
+    "bandit",
+    "pip-audit",
+    "pre-commit",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
+files = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["temporalio.*"]
+ignore_missing_imports = true
+
+[tool.pyright]
+include = ["src"]
+typeCheckingMode = "strict"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.bandit]
+exclude_dirs = ["tests", "example"]
+
+[tool.importlinter]
+root_package = "arvel_workflow"
+include_external_packages = true
+
+# The light-import discipline, enforced in CI (the same rule arvel core lives by): the engine
+# never appears on the module import path — it's lazy-imported inside the few modules that
+# actually drive it, so a web process importing arvel_workflow pays nothing for temporalio.
+[[tool.importlinter.contracts]]
+name = "the engine stays out of the import path"
+type = "forbidden"
+source_modules = ["arvel_workflow"]
+forbidden_modules = ["temporalio"]
+# the ONLY sanctioned edges — each one a lazy, function-local import
+ignore_imports = [
+    "arvel_workflow.worker -> temporalio",
+    "arvel_workflow.facade -> temporalio",
+    "arvel_workflow.decorators -> temporalio",
+    "arvel_workflow.commands -> temporalio",
+]

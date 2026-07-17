@@ -30,7 +30,9 @@ def test_autoload_is_dotted_and_skips_underscored(tmp_path: Path) -> None:
     (tmp_path / "app" / "__init__.py").write_text("")
     (tmp_path / "app" / "activities" / "__init__.py").write_text("")
     (tmp_path / "app" / "activities" / "ping.py").write_text("LOADED = True\n")
-    (tmp_path / "app" / "activities" / "_skip.py").write_text("raise RuntimeError('must not load')\n")
+    (tmp_path / "app" / "activities" / "_skip.py").write_text(
+        "raise RuntimeError('must not load')\n"
+    )
     sys.path.insert(0, str(tmp_path))
     try:
         from arvel_workflow.autoload import _discover_dir

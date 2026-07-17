@@ -23,6 +23,4 @@ class WorkflowWorkerResource:
             s = WorkflowSettings.from_source(self.app.config("workflow"))
         except Exception as exc:  # bad/missing config surfaces here, not on first use
             return HealthResult(HealthStatus.FAILED, detail=str(exc))
-        return HealthResult(
-            HealthStatus.OK, detail=f"temporal {s.target} · queue={s.task_queue}"
-        )
+        return HealthResult(HealthStatus.OK, detail=f"temporal {s.target} · queue={s.task_queue}")

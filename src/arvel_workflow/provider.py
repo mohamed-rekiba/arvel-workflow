@@ -8,14 +8,22 @@ not at boot — the web process must not import workflow modules (keeps ``tempor
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from arvel.kernel import ServiceProvider
 
 from .facade import Workflow
 
+if TYPE_CHECKING:
+    from arvel.contracts import Container
+
 
 class WorkflowServiceProvider(ServiceProvider):
     def register(self) -> None:
-        self.app.singleton("workflow", lambda c: Workflow(self.app))
+        def make_workflow(container: Container) -> Workflow:
+            return Workflow(self.app)
+
+        self.app.singleton("workflow", make_workflow)
 
         from .commands import WorkflowWorkCommand
 

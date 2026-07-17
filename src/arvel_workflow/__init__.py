@@ -10,4 +10,6 @@ from __future__ import annotations
 from .decorators import activity, run_activity, workflow
 from .facade import Workflow, WorkflowHandle
 
-__all__ = ["workflow", "activity", "run_activity", "Workflow", "WorkflowHandle"]
+__version__ = "0.1.0"  # x-release-please-version
+
+__all__ = ["__version__", "workflow", "activity", "run_activity", "Workflow", "WorkflowHandle"]

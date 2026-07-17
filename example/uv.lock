@@ -243,7 +243,6 @@ provides-extras = ["2fa", "all", "azure", "console", "dev", "docs", "gcs", "http
 
 [[package]]
 name = "arvel-workflow"
-version = "0.1.0"
 source = { editable = "../" }
 dependencies = [
     { name = "arvel" },
@@ -257,11 +256,24 @@ temporal = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arvel", editable = "../../arvel" },
+    { name = "arvel" },
     { name = "msgspec" },
     { name = "temporalio", marker = "extra == 'temporal'", specifier = ">=1.7" },
 ]
 provides-extras = ["temporal"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "bandit" },
+    { name = "import-linter" },
+    { name = "mypy" },
+    { name = "pip-audit" },
+    { name = "pre-commit" },
+    { name = "pyright" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "ruff" },
+]
 
 [[package]]
 name = "bcrypt"

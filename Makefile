@@ -2,7 +2,7 @@
 RUN ?= uv run
 
 .DEFAULT_GOAL := help
-.PHONY: help sync lint format format-check typecheck imports test test-integration check pre-commit hooks clean
+.PHONY: help sync lint format format-check typecheck imports test acceptance check pre-commit hooks clean
 
 help:  ## Show this help
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
@@ -20,17 +20,18 @@ format:  ## Ruff format (writes)
 format-check:  ## Ruff format (check only)
 	$(RUN) ruff format --check .
 
-typecheck:  ## Strict mypy
+typecheck:  ## Strict mypy + pyright (both, exactly as CI runs them)
 	$(RUN) mypy src
+	$(RUN) pyright
 
-imports:  ## import-linter — keeps engines (litellm/httpx/temporalio) off the import path
+imports:  ## import-linter — keeps the engine (temporalio) off the import path
 	PYTHONPATH=src $(RUN) lint-imports
 
-test:  ## pytest (hermetic; integration tiers are env-gated)
+test:  ## pytest — the pure logic (the engine is exercised by `make acceptance`)
 	$(RUN) pytest
 
-test-integration:  ## real-service tier — testcontainers spins up Temporal (needs Docker)
-	AI_INTEGRATION=1 $(RUN) --extra temporal pytest tests/test_workflow_temporal.py
+acceptance:  ## the real thing: boot the example app against a live Temporal dev server
+	cd example && uv run python acceptance.py
 
 check: lint format-check typecheck imports test  ## Everything CI runs
 
