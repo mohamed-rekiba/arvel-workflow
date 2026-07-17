@@ -1,4 +1,4 @@
-"""Minimal arvel app for the arvel-workflow Phase 0 example — worker only, no HTTP."""
+"""Minimal arvel app for the arvel-workflow example — worker only, no HTTP."""
 from pathlib import Path
 from arvel.kernel import Application
 

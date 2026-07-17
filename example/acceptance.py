@@ -1,5 +1,6 @@
-"""Phase 0 acceptance — AC3/AC4/AC5 through the real path, deterministically (one process:
-boot app → run worker → drive via the Workflow facade → read the Cache DI side effect)."""
+"""End-to-end example: boot the app, run the worker in-process, start a workflow through the
+Workflow facade, and read back the side effect the activity left in the cache — the whole flow in
+one script, run against a real local Temporal server."""
 import asyncio
 from bootstrap.app import create_app
 from arvel.kernel.bootstrap import bootstrap_app
@@ -22,13 +23,13 @@ async def main():
         worker = build_worker(env.client, "arvel")
         async with worker:      # run worker in the background for the block
             wf = app.make("workflow")
-            handle = await wf.start(Greet, "world")     # AC4: facade start
-            result = await wf.result(handle)            # AC4: facade result
-            count = await Cache.get("greet:count")      # AC5: read the activity's DI side effect
+            handle = await wf.start(Greet, "world")     # start through the facade
+            result = await wf.result(handle)            # await the result
+            count = await Cache.get("greet:count")      # the side effect the activity left
     print("RESULT:", result)
     print("Cache greet:count =", count)
     assert result == "hello world (#1)", result
     assert int(count) == 1, count
-    print("OK/AC4+AC5: workflow COMPLETED via facade; activity used real arvel Cache DI (count=1)")
+    print("OK: workflow completed via the facade; the activity used the real Cache")
 
 asyncio.run(main())

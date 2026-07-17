@@ -1,8 +1,7 @@
-"""The ``Workflow`` facade — the client side. Phase 0 surface: ``start`` + ``result``.
+"""The ``Workflow`` facade — the client side: ``start`` and ``result``.
 
-Holds a lazily-connected, pooled ``temporalio`` client (connect-once, not per-call — one of
-DR-0050's boilerplate deletions vs the course's connect-per-request). No ``temporalio`` type
-crosses out: ``start`` returns an arvel-owned ``WorkflowHandle``.
+Holds a lazily-connected, pooled ``temporalio`` client (connect once, not per call). No
+``temporalio`` type crosses out: ``start`` returns an arvel-owned ``WorkflowHandle``.
 """
 
 from __future__ import annotations

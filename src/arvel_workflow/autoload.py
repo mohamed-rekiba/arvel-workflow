@@ -1,4 +1,4 @@
-"""Discover ``app/workflows/`` + ``app/activities/`` by **dotted import** (DR-0051).
+"""Discover ``app/workflows/`` + ``app/activities/`` by **dotted import**.
 
 Unlike arvel's listener/MCP-tool autoload (which loads by path via ``spec_from_file_location``),
 workflow modules must be loaded under their **real dotted name** — Temporal's sandbox re-imports

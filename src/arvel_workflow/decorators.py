@@ -1,12 +1,11 @@
 """``@workflow`` / ``@activity`` and the one Phase-0 workflow verb, ``run_activity``.
 
 The engine (``temporalio``) is **lazy-imported** here, so ``import arvel_workflow`` for the
-settings/facade surface never drags it in (dependency rule, DR-0050) — the import only fires
-when an actual workflow/activity module loads (the worker process).
+settings/facade surface never drags it in — the import only fires when an actual workflow/activity
+module loads (the worker process).
 
-Phase 0 keeps the workflow body's activity call as a module-level helper (``run_activity``)
-rather than an injected ``ctx.run`` — the ``ctx`` sugar and per-activity timeout/retry are
-Phase-1 refinements. Either way, app code imports no ``temporalio``.
+The workflow body calls activities through a module-level helper (``run_activity``) rather than an
+injected context object; either way, app code imports no ``temporalio``.
 """
 
 from __future__ import annotations
@@ -16,7 +15,7 @@ from typing import Any
 
 from .registry import ACTIVITIES, WORKFLOWS
 
-_DEFAULT_ACTIVITY_TIMEOUT = timedelta(seconds=30)  # Phase 0: hardcoded (timeout sugar is Phase 1)
+_DEFAULT_ACTIVITY_TIMEOUT = timedelta(seconds=30)  # per-activity timeout sugar is a later addition
 
 
 def workflow(cls: type) -> type:

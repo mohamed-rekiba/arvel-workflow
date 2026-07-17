@@ -1,9 +1,9 @@
 """``build_worker`` — wraps ``temporalio``'s Worker with the passthrough sandbox runner.
 
-This is the crux (DR-0050/DR-0051): the sandbox stays **on** (runtime determinism checks apply),
-but ``with_passthrough_modules`` passes the framework + app modules through so a workflow file's
-plain ``from app.activities... import ...`` needs no ``imports_passed_through()`` block. App
-authors write plain imports; the ceremony lives here.
+The sandbox stays **on** (its runtime determinism checks still apply), but ``with_passthrough_modules``
+passes the framework + app modules through, so a workflow file's plain ``from app.activities...
+import ...`` needs no ``imports_passed_through()`` block. App authors write plain imports; the
+sandbox wiring lives here.
 """
 
 from __future__ import annotations

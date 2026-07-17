@@ -1,5 +1,5 @@
-"""Phase 0 unit tests — the pure logic. The Temporal integration (sandbox, worker, real
-run-to-COMPLETED) is proven by the example acceptance (example/acceptance.py), not mocked here."""
+"""Unit tests for the pure logic. The Temporal integration (sandbox, worker, real run-to-completion)
+is exercised by the example (example/acceptance.py) against a live test server, not mocked here."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ def test_workflow_handle_carries_id() -> None:
 
 
 def test_autoload_is_dotted_and_skips_underscored(tmp_path: Path) -> None:
-    # a temp app/activities package; the loader imports by DOTTED name (DR-0051)
+    # a temp app/activities package; the loader imports by DOTTED name
     (tmp_path / "app" / "activities").mkdir(parents=True)
     (tmp_path / "app" / "__init__.py").write_text("")
     (tmp_path / "app" / "activities" / "__init__.py").write_text("")
